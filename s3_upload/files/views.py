@@ -11,16 +11,10 @@ def sign_s3(data):
     # Get file information
     bucket = data['conditions'][1]['bucket']
     key = data['conditions'][5]['key']
-    acl = data['conditions'][0]['acl']
-    file_type = data['conditions'][2]['Content-Type']
 
     presigned_post = s3.generate_presigned_post(
         Bucket = bucket,
         Key = key,
-        Fields = {
-            "acl": acl,
-            "Content-Type": file_type
-        },
         Conditions = data['conditions'],
     )
 
