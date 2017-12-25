@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Django S3 Uploads</title>
+</head>
+<body>
+
+<div id="uploader">Upload</div>
+
+<script src="{% static 'files/fine-uploader/s3.fine-uploader/s3.fine-uploader.core.min.js' %}"></script>
+
+<script>
+    var last_file = "";
+    var uploader = new qq.s3.FineUploaderBasic({
+        button: document.getElementById("uploader"),
+        multiple: false,
+        objectProperties: {
+            region: 'us-east-2',
+            key: 'uuid'
+        },
+        signature: {
+            endpoint: '/s3/signature/',
+            version: 4
+        },
+        request: {
+            endpoint: 'local.practice.s3.amazonaws.com',
+            accessKey: 'AKIAJBSETE3LZFCTGMDA'
+            //clockDrift: 5000
+        },
+        uploadSuccess: {
+            endpoint: '/s3/success/',
+            method: 'POST'
+        },
+        callbacks: {
+            onComplete: function (id, name, response, xhr) {
+                console.log('onComplete()', id, name, response, xhr);
+                if (last_file === "") {
+                    last_file = name
+                }
+                if (name !== last_file) {
+                    console.log('replacing last file')
+                    // Delete the old one
+                    // ACTUALLY, I don't need to do this, because the server side can delete the old
+                    // logo whenever the organization uploads a logo file
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

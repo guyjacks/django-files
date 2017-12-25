@@ -12,10 +12,15 @@ def sign_s3(data):
     bucket = data['conditions'][1]['bucket']
     key = data['conditions'][5]['key']
 
+    # I don't think we're supposed to send the date with the request.
+    # It causes errors sometimes when we do, but not all of the time.
+    # https://github.com/aws/aws-sdk-js/issues/1514
+    conditions_without_amz_date = [c for c in data['conditions'] if 'x-amz-date' not in c]
+
     presigned_post = s3.generate_presigned_post(
         Bucket = bucket,
         Key = key,
-        Conditions = data['conditions'],
+        Conditions = conditions_without_amz_date,
     )
 
     return {
@@ -24,7 +29,7 @@ def sign_s3(data):
     }
 
 
-class FileCreateView(APIView):
+class S3SignatureView(APIView):
 
     # as an installable django plugin, how would I make authentication optional?
     # how do I allow the user to specify that the file should be related to multiple objects?
@@ -35,22 +40,21 @@ class FileCreateView(APIView):
 
     def post(self, request, format=None):
         # how will i tell it to relate the new file to another model?
-        print('POST', request.data)
+        print('/s3/signature/', request.data)
         signature = sign_s3(request.data)
-        print('signature', signature)
         return Response(signature)
 
 
-class FileUpdateView(APIView):
-    def put(self, request, pk, format=None):
-        # update the file
-        print('PUT', pk, request.data)
+class S3SuccessView(APIView):
 
-    def delete(self, pk):
-        # delete the database record
-        # delete the s3 file
-        pass
+    def post(self, request, format=None):
+        print('/s3/success/', request.data)
+        return Response({})
 
 
-class DemoView(TemplateView):
-    template_name = 'files/demo.html'
+class S3GalleryDemoView(TemplateView):
+    template_name = 'files/s3_gallery_demo.html'
+
+
+class S3CoreDemoView(TemplateView):
+    template_name = 'files/s3_core_demo.html'

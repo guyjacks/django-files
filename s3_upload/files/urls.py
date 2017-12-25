@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import FileCreateView, FileUpdateView, DemoView
+from .views import S3SignatureView, S3SuccessView, S3CoreDemoView, S3GalleryDemoView
 
 urlpatterns = [
-    url(r'^files/$', FileCreateView.as_view()),
-    url(r'^files/(?P<pk>\d+)/$', FileUpdateView.as_view()),
-    url(r'^files/demo/$', DemoView.as_view())
+    url(r'^s3/signature/$', S3SignatureView.as_view()),
+    url(r'^s3/success/$', S3SuccessView.as_view()),
+    url(r'^files/demo/s3-gallery/$', S3GalleryDemoView.as_view()),
+    url(r'^files/demo/s3-core/$', S3CoreDemoView.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
