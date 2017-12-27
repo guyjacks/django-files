@@ -52,6 +52,10 @@ class S3SuccessView(APIView):
         return Response({})
 
 
+class S3RowDemoView(TemplateView):
+    template_name = 'files/s3_row_demo.html'
+
+
 class S3GalleryDemoView(TemplateView):
     template_name = 'files/s3_gallery_demo.html'
 
