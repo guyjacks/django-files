@@ -7,9 +7,8 @@ register = template.Library()
 @register.simple_tag
 def django_files_head(tag):
     files = {
-        'fine-uploader-custom': 'files/fine_uploader_custom.html',
         'fine-uploader-ui-gallery': 'files/fine_uploader_ui_gallery.html',
-        'fine-uploader-ui-new': 'files/fine_uploader_ui_new.html',
+        'fine-uploader-ui-row': 'files/fine_uploader_ui_row.html',
     }
 
     template = get_template(files[tag])
