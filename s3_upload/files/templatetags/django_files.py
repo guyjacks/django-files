@@ -19,8 +19,6 @@ def django_files_head(tag):
 @register.simple_tag
 def django_files_scripts(tag):
     files = {
-        'fine-uploader-custom-core': 'files/fine-uploader/s3.fine-uploader/s3.fine-uploader.core.min.js',
-        'fine-uploader-custom-ui': 'files/fine-uploader/s3.fine-uploader/s3.fine-uploader.min.js',
         'fine-uploader-s3-core': 'files/fine-uploader/s3.fine-uploader/s3.fine-uploader.core.min.js',
         'fine-uploader-s3-ui': 'files/fine-uploader/s3.fine-uploader/s3.fine-uploader.min.js',
     }
