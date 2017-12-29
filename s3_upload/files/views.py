@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.generic import TemplateView
-import json, boto3
+import boto3
 
 
 def sign_s3(data):
@@ -18,9 +18,9 @@ def sign_s3(data):
     conditions_without_amz_date = [c for c in data['conditions'] if 'x-amz-date' not in c]
 
     presigned_post = s3.generate_presigned_post(
-        Bucket = bucket,
-        Key = key,
-        Conditions = conditions_without_amz_date,
+        Bucket=bucket,
+        Key=key,
+        Conditions=conditions_without_amz_date,
     )
 
     return {
@@ -30,13 +30,23 @@ def sign_s3(data):
 
 
 class S3SignatureView(APIView):
+    """
+    As an installable django plugin, how would I make authentication optional?
+    how do I allow the user to specify that the file should be related to
+    multiple objects?
+    - register (model=Organization, field=logo, reverse=organization)
+    - register (
+            model=Badge,
+            field=images,
+            reverse=badges,
+            lookup_by=('field 1', 'field 2')
+        )
+    - lookup_by is optional and covers cases when the related object has a
+    multi-field primary key (default is 'pk')
 
-    # as an installable django plugin, how would I make authentication optional?
-    # how do I allow the user to specify that the file should be related to multiple objects?
-    # - register (model=Organization, field=logo, reverse=organization)
-    # - register (model=Badge, field=images, reverse=badges, lookup_by=('field 1', 'field 2'))
-    # - lookup_by is optional and covers cases when the related object has a multi-field primary key (default is 'pk')
-    # post data will expect an optional 'related' field with the model name i.e. 'Badge' and the necessary lookup fields)
+    post data will expect an optional 'related' field with the model name i.e.
+    'Badge' and the necessary lookup fields)
+    """
 
     def post(self, request, format=None):
         # how will i tell it to relate the new file to another model?
@@ -46,7 +56,6 @@ class S3SignatureView(APIView):
 
 
 class S3SuccessView(APIView):
-
     def post(self, request, format=None):
         print('/s3/success/', request.data)
         return Response({})
